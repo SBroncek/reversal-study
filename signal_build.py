@@ -58,7 +58,13 @@ def alignment_check(panel: pd.DataFrame, ticker: str, anchor_date):
     anchors = anchor_grid(panel)
     signal, forward = build(panel)
 
-    i = anchors.index.get_loc(pd.Timestamp(anchor_date))
+    # get_indexer, not get_loc: get_loc's return type is int | slice | bool-array,
+    # since a non-unique index makes "the position of this label" ambiguous. On a
+    # duplicated week label the arithmetic below would then silently do something
+    # other than what it reads as. get_indexer always gives positions, -1 if absent.
+    i = int(anchors.index.get_indexer([pd.Timestamp(anchor_date)])[0])
+    if i < 1 or i > len(anchors) - 2:
+        raise KeyError(f"{anchor_date} is not an anchor with a week either side")
     p_prev = anchors[ticker].iloc[i - 1]
     p_now  = anchors[ticker].iloc[i]
     p_next = anchors[ticker].iloc[i + 1]
