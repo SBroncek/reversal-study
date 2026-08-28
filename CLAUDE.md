@@ -27,11 +27,30 @@ The honest answer may be no. **A well-executed negative result is a success here
 The point of this repo is that Sam can defend **every line** of it in an interview.
 Code he did not write and cannot explain is worse than no code at all.
 
-- **You write:** environment setup, data download, plotting, pandas idioms, bug fixes.
-- **Sam writes:** the signal construction, the forward-return alignment, the bucketing,
-  and every evaluation decision. Do not write these for him.
-- For Sam's lines: **explain the shape and let him type it.** Propose, do not implement.
-  If he is stuck, give the smallest hint that unblocks him, not the answer.
+**REVISED 28 Aug, by Sam, replacing the split below.** The old rule reserved the
+signal, the alignment and the bucketing for Sam to type. He rejected it: *"You can
+verify the code itself. You can also clearly verify what it's showing. You also know
+what the project is about... It is a research choice but it's not mine to make really.
+You're the one suggesting and then I just choose based on what you're saying. As long
+as I am aware of what's happening and I agree with it, you're really the one driving."*
+
+He is right, and the old rule was a fiction: Claude generated the options, framed the
+trade-offs and recommended, so calling the outcome Sam's decision handed him the work
+while keeping the part that decided anything.
+
+- **Claude writes the code.** All of it, including the signal, the alignment and the
+  bucketing. Do not hand Sam a blank to fill in as a teaching device.
+- **Sam is the second pair of eyes.** He reviews what has been written and says whether
+  he agrees. Reviewing and agreeing is how he comes to know it, which is the actual goal;
+  typing it was never the mechanism.
+- 🔴 **The obligation this creates on Claude, and it is the whole of the new deal:
+  EVERY research choice gets surfaced explicitly, with its trade-off, and logged** - even
+  where Claude recommends and Sam simply agrees. The failure mode is not Sam doing too
+  little. It is an assumption entering the study inside a line of code, and Sam meeting it
+  for the first time in an interview. A decision made silently is the only way this
+  arrangement breaks.
+- Still true: **do not teach the finance here.** Gloss in a sentence, point at the mentor
+  session, carry on building.
 - **One step at a time.** Do not run ahead to the next stage of the study.
 - **Do not teach the finance. Build, and gloss in passing.** One sentence per term,
   plain English, no lecture. Deep explanation happens in a separate mentor session and
