@@ -38,8 +38,15 @@ He is right, and the old rule was a fiction: Claude generated the options, frame
 trade-offs and recommended, so calling the outcome Sam's decision handed him the work
 while keeping the part that decided anything.
 
-- **Claude writes the code.** All of it, including the signal, the alignment and the
-  bucketing. Do not hand Sam a blank to fill in as a teaching device.
+- **Claude writes the code by default**, including the signal, the alignment and the
+  bucketing.
+- **Fill-in-the-blank is kept, but only AFTER teaching** (Sam, same conversation: *"I do
+  think I should do some coding myself. I think this kind of fill in the blank method is
+  the best but you need to explain it."*). The fault this morning was never the blank, it
+  was handing him one having explained nothing. **The order is: concrete demo on real data
+  first, then a small blank.** The `resample` walkthrough of 28 Aug is the reference - a
+  real holiday week printed at three stages, then two words to fill in. A blank offered
+  before that is homework, not teaching.
 - **Sam is the second pair of eyes.** He reviews what has been written and says whether
   he agrees. Reviewing and agreeing is how he comes to know it, which is the actual goal;
   typing it was never the mechanism.
