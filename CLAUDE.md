@@ -44,6 +44,17 @@ Code he did not write and cannot explain is worse than no code at all.
 
 ## Conventions
 
+- **Claude commits, without being asked** (Sam's call, 28 Aug). At any point the tree
+  is in a coherent state -- a script runs, a check passes, a decision lands -- commit
+  it, with a message that says *why*, not just what. Pushing is fine too. Do not sit
+  on two sessions of work again: `universe.py` and `signal_build.py` went uncommitted
+  from 25-28 Aug, so the repo showed one commit while three days of work existed.
+  (This is the opposite of the vault rule, where the Obsidian Git plugin owns commits.
+  Different repo, different rule.)
+- **Explain every line you write, as you write it** (restated by Sam, 28 Aug). Not a
+  summary afterwards. This does not replace the rule above about which lines are
+  Sam's to type -- it applies to the lines that are Claude's.
+
 - Plain `.py` scripts, not notebooks. Scripts diff cleanly and read better on GitHub.
 - Raw data cached under `data/` and gitignored. Never re-download in a hot loop.
 - Every script runs top to bottom on its own with no hidden state.
