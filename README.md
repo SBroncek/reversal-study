@@ -7,8 +7,9 @@ Ten years of daily prices, 99 US large caps, Aug 2016 to Aug 2026. Every week th
 cross-section is ranked on its past-week return, cut into quintiles, and each bucket's
 next-week return is measured.
 
-**Status: stages 1 and 2 complete. The number below has no error bar on it yet.**
-Read the [What is not done yet](#what-is-not-done-yet) section before quoting anything here.
+**Status: stages 1 to 3 (error bars) complete. The headline spread is NOT statistically
+distinguishable from zero (t = +0.79).** Out-of-sample testing, robustness and transaction
+costs are still outstanding: see [What is not done yet](#what-is-not-done-yet).
 
 ---
 
@@ -41,8 +42,10 @@ The pre-specified headline number:
 
 > **Spread (bucket 1 minus bucket 5) = +0.0855 % per week.**
 
-The sign points the way reversal predicts. Bucket 5 turning up is what costs the study its
-headline: without it the gap would be roughly double.
+The sign points the way reversal predicts, and that is all it does: **t = +0.79, so the
+spread sits under one standard error from zero.** Bucket 5 turning up is part of why. Without
+it the gap would be roughly double, which is precisely why the next section exists rather
+than that comparison being made.
 
 ### The number that was computed and deliberately not reported
 
@@ -55,19 +58,51 @@ way of finding the luckiest of thirty coin-flip sequences and calling it a signa
 
 ### How big is +0.0855 % really
 
-Small enough that it is not yet a result.
+**It is not distinguishable from zero. t = +0.79.**
 
-A crude envelope on the standard error of the final averaged spread puts it near
-0.05 %/week, which makes the headline about **1.8 standard errors**. Computing the same
-thing with a measured weekly standard deviation rather than a modelled one gives roughly
-**1.6**. Both are short of any conventional bar, and both are optimistic, because weeks are
-not independent: positive autocorrelation makes a standard error too small, which makes a
-study look **more** significant than it is, not less.
+The unit of observation is the **week**, not the stock-week: the study produces one spread
+per week, so the sample is 521, not 521 x 99. Treating stock-weeks as independent would
+divide the standard error by about sqrt(99) and manufacture a discovery out of nothing.
 
-On the same crude basis the annualised Sharpe ratio is about **0.51**, against a bar nearer
-1 for a fund strategy, and that is **before** transaction costs.
+Measured off the data rather than modelled, the weekly spread has a standard deviation of
+**2.46 %**, giving a standard error of **0.108 %/week**. The spread is +0.0855 %.
 
-**So: suggestive, not established.** Stage 3 does this properly.
+| | value |
+|---|---|
+| mean weekly spread | +0.0855 % |
+| standard deviation, weekly, measured | 2.46 % |
+| standard error, naive `s/sqrt(T)` | 0.108 % |
+| **t-statistic** | **+0.79** |
+| Newey-West SE (lag 5) | 0.104 % |
+| Newey-West t | +0.82 |
+| annualised Sharpe ratio | **0.251** |
+
+**An earlier envelope in this project put the t-statistic near 1.8 and the Sharpe near 0.51.
+That envelope modelled the bucket standard error at about 1.1 %/week and assumed
+differencing the buckets would shrink it. Measuring it instead gives more than double that
+figure, and every number downstream inherited the error. The measured version supersedes it.**
+
+### The autocorrelation correction, which turned out not to matter
+
+Weekly spreads were expected to be positively autocorrelated, which would make `s/sqrt(T)`
+too small and the study look **more** significant than it is. That was measured rather than
+assumed, and it is not there: lags 1 to 3 come in at +0.003, +0.002 and -0.002.
+
+A Newey-West standard error, which adds the covariance terms the naive formula omits, moves
+the t-statistic from 0.79 to **0.82**. Because the residual dependence is mildly negative,
+the naive standard error is if anything the conservative one here. The conclusion is stable
+across every lag from 0 to 20, so it is not resting on a lag choice.
+
+One oddity worth recording without over-reading: lag 4 sits at **-0.13**, a roughly monthly
+reversal in the spread itself. One number, not investigated.
+
+### What would it take
+
+At this mean and this variability, reaching t = 2 would need about **3,300 weeks, or 64
+years**, of data. The sample is 10 years.
+
+That is the honest size of the gap, and it is the reason this reads as a negative result
+rather than a weak positive one.
 
 ---
 
@@ -167,11 +202,10 @@ result does not depend on the choice.
 
 ## What is not done yet
 
-- **Error bars on the spread**, computed properly, with the week as the unit of observation
-  and the weekly standard deviation measured rather than modelled. The numbers in this
-  README are envelopes.
-- **Autocorrelation** between consecutive weeks, which the current standard error ignores
-  and which pushes the result in the unfavourable direction.
+- ~~Error bars on the spread~~ **DONE:** the week as the unit, the standard deviation
+  measured, t = +0.79.
+- ~~Autocorrelation between consecutive weeks~~ **DONE:** measured at lags 1 to 10 and a
+  Newey-West standard error applied. It is negligible and does not change the conclusion.
 - **The parametric cross-check:** regress forward return on signal and read the slope and
   its standard error. It fails differently from the bucket test, since a regression assumes
   linearity and would average a tail-only effect into a weak slope, while buckets assume
@@ -192,6 +226,7 @@ result does not depend on the choice.
 python download.py      # fetch and cache the universe, one CSV per ticker
 python signal_build.py  # build the signal and forward-return panels
 python buckets.py       # rank, bucket, and print the headline table
+python errorbars.py     # autocorrelation, standard errors, t-stat, Sharpe
 ```
 
 Plain scripts, no notebooks. Each runs top to bottom with no hidden state. Raw data is
