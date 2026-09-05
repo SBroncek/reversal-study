@@ -41,9 +41,17 @@ WEEKS_PER_YEAR = 52
 def weekly_spread(means: pd.DataFrame) -> pd.Series:
     """The study's actual sample: one bucket-1-minus-bucket-5 number per week."""
     lo, hi = means.columns[0], means.columns[-1]
-    # dropna guards the case where a week produced one bucket but not the other.
-    # It does not fire on this panel, but a subtraction against NaN would silently
-    # shorten the sample rather than announcing itself.
+    # dropna is a FORWARD-LOOKING GUARD AND DOES NOT CURRENTLY FIRE: the means
+    # table has zero NaN cells, because qcut always fills all five buckets and
+    # bucket_means drops a week whole rather than partially. Verified 3 Sept.
+    # It would start doing work if buckets were ever cut on raw values (pd.cut,
+    # equal-WIDTH bands) instead of ranks, since a calm week can leave such a band
+    # empty. Kept because a subtraction against NaN would then silently shorten
+    # the sample rather than announcing itself.
+    #
+    # The 523 -> 521 does NOT happen here. It happens in bucket_means, and it is
+    # the first anchor (no prior week, so no signal) and the last (no following
+    # week, so no forward return). One lost at each end, both structural.
     return (means[lo] - means[hi]).dropna()
 
 

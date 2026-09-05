@@ -17,7 +17,10 @@ costs are still outstanding: see [What is not done yet](#what-is-not-done-yet).
 
 **The sort is not monotonic. Both extremes beat the middle.**
 
-Mean forward return by bucket, % per week, 521 of 523 weeks:
+Mean forward return by bucket, % per week, 521 of 523 weeks. **The two missing
+weeks are the first and last anchors and nothing else**: the first has no prior week
+to compute a signal from, the last has no following week to measure a forward return
+over. No week is dropped for data quality, and no individual bucket is ever missing.
 
 | bucket | 1 (biggest losers) | 2 | 3 | 4 | 5 (biggest winners) |
 |---|---|---|---|---|---|
