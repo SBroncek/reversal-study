@@ -29,12 +29,24 @@ def anchor_grid(panel: pd.DataFrame) -> pd.DataFrame:
     both call it, so the check cannot verify a grid the study does not use.
 
     .last() takes each column's last non-NaN value in the bucket, so a week whose
-    Friday was a holiday resolves to Thursday's close, still labelled Friday.
-    Selecting Fridays directly would instead drop those 96 weeks outright.
+    Friday was a holiday resolves to Thursday's close, still labelled Friday. The
+    label is a bucket name, not a claim about which weekday the price came from.
+    Selecting Fridays directly would instead drop those weeks outright: measured,
+    18 of the 523 anchors (3.4%) have no Friday trading day.
 
-    how="all" only removes weeks with no data for any name. The default, "any",
-    would cut the sample from 523 weeks to 381 by deleting every week in which a
-    single one of the 99 tickers was missing.
+    NOT to be confused with the 96 four-day weeks (18.5%), which is a different
+    quantity and belongs to a different argument. In 78 of those the missing day
+    is a Monday or a Wednesday and the Friday traded normally, so .last() never
+    sees them. 18.5% is the correct figure for the README's caveat that weekly
+    observations are not identically scaled; 3.4% is the figure that justifies
+    .last() over selecting Fridays. (An earlier version of this docstring fused
+    the two and cited 96 here. Verified against the panel 3 Sept.)
+
+    how="all" only removes weeks with no data for any name, and on this panel it
+    removes none: 523 rows in, 523 out. It is standing in front of the default.
+    "any" would cut the sample to 381, deleting 142 weeks (27%) because a single
+    one of the 99 tickers was missing, so one 2019 IPO would silently erase the
+    first three years of the study for the other 98 names. Verified 3 Sept.
     """
     return panel.resample("W-FRI").last().dropna(how="all")
 
