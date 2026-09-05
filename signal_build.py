@@ -40,13 +40,13 @@ def anchor_grid(panel: pd.DataFrame) -> pd.DataFrame:
     sees them. 18.5% is the correct figure for the README's caveat that weekly
     observations are not identically scaled; 3.4% is the figure that justifies
     .last() over selecting Fridays. (An earlier version of this docstring fused
-    the two and cited 96 here. Verified against the panel 3 Sept.)
+    the two and cited 96 here. Verified against the panel 5 Sept.)
 
     how="all" only removes weeks with no data for any name, and on this panel it
     removes none: 523 rows in, 523 out. It is standing in front of the default.
     "any" would cut the sample to 381, deleting 142 weeks (27%) because a single
     one of the 99 tickers was missing, so one 2019 IPO would silently erase the
-    first three years of the study for the other 98 names. Verified 3 Sept.
+    first three years of the study for the other 98 names. Verified 5 Sept.
     """
     return panel.resample("W-FRI").last().dropna(how="all")
 
