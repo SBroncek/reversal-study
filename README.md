@@ -96,6 +96,17 @@ the t-statistic from 0.79 to **0.82**. Because the residual dependence is mildly
 the naive standard error is if anything the conservative one here. The conclusion is stable
 across every lag from 0 to 20, so it is not resting on a lag choice.
 
+**How the autocorrelations are estimated, since the convention is a choice.** Each lag is
+`gamma_k / gamma_0`, where `gamma_k` sums the products of deviations k weeks apart and divides by
+**T, not by the T-k pairs actually summed**. That is the textbook convention and it is deliberate:
+dividing by T shrinks the far-out lags toward zero where they are estimated from few pairs, and it
+guarantees the whole set of lags is mutually consistent, so the Newey-West sum built from them
+cannot return a negative variance. Dividing by `gamma_0` rather than by the two separate standard
+deviations assumes **stationarity**, that the series has one variance rather than a different one
+early and late. That assumption is made, not tested, and the sample spans March 2020. Note also
+that this is not `pandas.Series.autocorr()`, which demeans the two shortened series separately and
+therefore does not compose into the Newey-West sum.
+
 One oddity worth recording without over-reading: lag 4 sits at **-0.13**, a roughly monthly
 reversal in the spread itself. One number, not investigated.
 
