@@ -132,7 +132,10 @@ def report(d: pd.Series) -> None:
     print("  (positive values mean the naive standard error below is too small)")
     rho = autocorrelation(d, max_lag=10)
     for k, v in rho.items():
-        bar = "#" * int(round(abs(v) * 100))
+        # Sign carried into the bar, not just the number. With abs() the largest
+        # value in the table (lag 4, -0.13) drew the same bar a +0.13 would, and
+        # the picture is what the eye reads first.
+        bar = ("+" if v >= 0 else "-") * int(round(abs(v) * 100))
         print(f"   lag {k:>2}: {v:+.4f}  {bar}")
 
     print("\n=== STANDARD ERRORS AND T-STATS ===")
@@ -160,6 +163,13 @@ def report(d: pd.Series) -> None:
     print(f"  weeks needed for the naive t to reach 2.0: {needed:,.0f} "
           f"({needed / WEEKS_PER_YEAR:,.0f} years)")
     print("  We have 10 years of data. That is the size of the gap.")
+    # NOT A POWER CALCULATION, and the difference matters. This treats the
+    # OBSERVED mean and sd as if they were the true ones, and the observed mean
+    # is the quantity we have just shown is indistinguishable from zero. A
+    # smaller true mean needs more weeks; a true mean of zero needs infinitely
+    # many. Read it as a statement of the size of the gap, never as a plan.
+    print("  (Assumes the observed mean IS the truth, so it is a scale for the")
+    print("   gap, not a power calculation. If the true mean is smaller, worse.)")
 
 
 if __name__ == "__main__":
