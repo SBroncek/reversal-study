@@ -32,12 +32,20 @@ Two conventions fixed here, both surfaced to Sam before they were written:
   (corr(dispersion, |spread|) = 0.36), so the weekly observations are not
   identically distributed and the error bar in errorbars.py assumes they are.
 
-  THE SPREAD IS AVERAGED, NOT DIFFERENCED AT THE END. We compute the spread each
-  week and then average those, rather than averaging each bucket over ten years
-  and subtracting once. The two agree exactly when both buckets exist in every
-  week, and when they do not, the weekly version is the honest one: it never
-  compares bucket 1's average over one set of weeks against bucket 5's over a
-  different set.
+  THE SPREAD IS DIFFERENCED WEEKLY, THEN AVERAGED. We form the spread inside each
+  week and average the 521 results, rather than averaging each bucket over ten
+  years and subtracting once.
+
+  On this panel the two routes agree to ten decimal places (+0.0855315612 either
+  way), because every bucket exists in every week. The choice therefore changes
+  no number today. It changes one as soon as a bucket goes missing in some week:
+  average-then-difference would compare bucket 1's average over one set of weeks
+  against bucket 5's average over a different set. Difference-then-average cannot,
+  since each spread is formed within a single week.
+
+  A bucket will go missing once point-in-time index membership replaces today's
+  membership, which is the survivorship fix the README names as defect 1. This
+  line is written for that panel, not this one.
 
 NO LOOKAHEAD: bucket membership at week t uses only prices up to t. The forward
 return from t to t+1 is measured after the assignment is fixed. The residual
@@ -60,9 +68,9 @@ from signal_build import build
 # full signal and no forward return; this guard never sees that, because it only
 # inspects the signal side. bucket_means catches it separately.
 #
-# Every other week in the sample carries 98 or 99 names, so as a data-quality
-# filter the threshold does nothing today and is a guard against a future
-# universe change.
+# Every other week carries 98 or 99 names, so the 40-name threshold rejects
+# nothing on data-quality grounds today. It starts rejecting weeks once the
+# universe becomes point-in-time and names enter and leave mid-sample.
 MIN_NAMES = 40
 
 
