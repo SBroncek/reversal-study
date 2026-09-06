@@ -9,9 +9,28 @@ Two conventions fixed here, both surfaced to Sam before they were written:
 
   RANKS, NOT RAW VALUES. Buckets are cut on the RANK of the signal, so every
   bucket holds the same number of names every week. Cutting on the raw return
-  instead would give equal-WIDTH return bands, and in a calm week bucket 1 might
-  hold two names while bucket 3 held sixty. Equal-sized buckets are what the spec
-  says and what a fund would actually trade.
+  instead gives equal-WIDTH return bands, and the damage is measured, not
+  hypothetical. Calmest week in the sample (2016-12-30), 99 names:
+
+      ranks (qcut):  20  19  20  19  20
+      raw   (cut):    1   5  43  47   2
+
+  Bucket 1 would hold ONE stock, so its "mean forward return" would be that one
+  stock, and the week's headline spread would be one name minus two. Note this
+  is not fixed by picking a more volatile week: the wildest week in ten years
+  (2026-05-08) gives 1 / 37 / 53 / 5 / 3, because returns are bell-shaped at any
+  scale and a single -27% name stretches the bands across the whole range. Equal
+  width buckets are hostage to the most extreme name in the cross-section.
+
+  The real argument for ranks is therefore COMPARABILITY: 20-vs-20 every week
+  means the 521 weekly spreads are the same kind of object and can be averaged.
+
+  Its cost, which is real: ranks discard magnitude, so "the worst 20 names" in a
+  calm week and in March 2020 are treated as the same event. That cost is NOT
+  removed by differencing the buckets. Measured, the weekly spread's standard
+  deviation is 1.50% in the calmest quartile of weeks and 3.51% in the wildest
+  (corr(dispersion, |spread|) = 0.36), so the weekly observations are not
+  identically distributed and the error bar in errorbars.py assumes they are.
 
   THE SPREAD IS AVERAGED, NOT DIFFERENCED AT THE END. We compute the spread each
   week and then average those, rather than averaging each bucket over ten years
@@ -32,9 +51,18 @@ from download import load_universe
 from signal_build import build
 
 # Fewer names than this in a week and the ranking is not worth cutting into five
-# groups: at 20 names a bucket is 4 stocks and the average is mostly noise. In
-# this panel no week trips it (the minimum is 96), so it is a guard against a
-# future universe change, not a filter doing work today.
+# groups: at 20 names a bucket is 4 stocks and the average is mostly noise.
+#
+# Exactly one week in this panel trips it, and it is not a data-quality week: the
+# FIRST anchor (2016-08-26) has no prior week to compute a signal from, so every
+# name is NaN and the count is 0. This guard is what drops it, and it is one half
+# of the README's "521 of 523". The other half is the LAST anchor, which has a
+# full signal and no forward return; this guard never sees that, because it only
+# inspects the signal side. bucket_means catches it separately.
+#
+# Every other week in the sample carries 98 or 99 names, so as a data-quality
+# filter the threshold does nothing today and is a guard against a future
+# universe change.
 MIN_NAMES = 40
 
 
