@@ -4,3 +4,5 @@ __pycache__/
 *.pyc
 figures/
 .DS_Store
+
+__pycache__/
