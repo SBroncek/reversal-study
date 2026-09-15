@@ -27,8 +27,12 @@ over. No week is dropped for data quality, and no individual bucket is ever miss
 | mean forward return | **+0.484** | +0.367 | +0.334 | +0.310 | **+0.399** |
 
 Buckets 1 to 4 slide downward exactly as reversal predicts: the harder a name fell, the
-better it did next week. Then bucket 5 turns back up above bucket 4. The shape is a **U**,
-not a line.
+better it did next week. Then bucket 5 turns back up above bucket 4. **It is not a line,
+and it is lopsided: the left end is the taller one.**
+
+⚠️ Calling this a "U" overstates it. There are five points, no error bar has been put on
+any individual bucket, and a fairer description is a downward slide with a sharp uptick at
+the far end. What follows treats the uptick as real enough to test, not as established.
 
 That is worth more than the headline spread, for two reasons.
 
@@ -37,7 +41,7 @@ That is worth more than the headline spread, for two reasons.
    flat, is usually two good weeks wearing a costume. This sort passes that check on the
    losing side and fails it on the winning side, and the failure is structured rather than
    random.
-2. **The U is two effects in one sort.** Reversal at the bottom, momentum at the top. The
+2. **The shape is two effects in one sort.** Reversal at the bottom, momentum at the top. The
    study was designed to test one hypothesis and the data is answering a second one that
    was never asked.
 
@@ -109,6 +113,47 @@ therefore does not compose into the Newey-West sum.
 
 One oddity worth recording without over-reading: lag 4 sits at **-0.13**, a roughly monthly
 reversal in the spread itself. One number, not investigated.
+
+### The parametric cross-check, which disagrees with the bucket test
+
+The bucket test discards the magnitudes and keeps only the ordering. The obvious second
+route keeps the magnitudes: each week, fit a straight line through the ~99 names with the
+signal on one axis and the forward return on the other, and read its slope. That is a
+Fama-MacBeth procedure - one cross-sectional regression per week, then the resulting 521
+slopes are treated as the data and their mean and standard error taken. The standard error
+is measured from the week-to-week scatter of the slopes rather than modelled from within a
+week, so it never assumes the names inside a week are independent.
+
+| | mean | SD (weekly) | SE | t |
+|---|---|---|---|---|
+| bucket spread, %/week | +0.0855 | 2.46 | 0.108 | **+0.79** |
+| regression slope | +0.00118 | 0.2469 | 0.0108 | **+0.109** |
+
+**The two point estimates have opposite signs.** The bucket spread leans the way reversal
+predicts. The mean slope leans, very faintly, the other way. Neither is distinguishable
+from zero and the slope is not distinguishable from anything at all: it is one tenth of a
+standard error out, 51.6 % of weekly slopes are negative, and resampling the weeks puts the
+middle 95 % of re-run answers at -0.021 to +0.022. In plain terms the slope says a stock
+that fell 10 % further than another last week went on to make 0.012 % less the next week,
+which is not a small effect so much as the absence of one.
+
+**The disagreement is the result, and it is structural rather than statistical.** A
+regression is obliged to answer with a single steepness. Given a sort where both ends do
+well, it averages the reversal on the left against the momentum on the right and reports
+approximately nothing. The bucket test can see that shape precisely because it assumes no
+shape. So the regression does not correct the bucket test and is not the more rigorous of
+the two - it is blind to the one feature of the data that is interesting.
+
+Neither number is reported as the finding. What is reported is that a linear specification
+cannot represent this sort, which is a stronger statement than either estimate on its own.
+
+One observation that is not a result. Splitting the 521 weeks into five consecutive blocks
+of ~104 gives mean slopes of -0.039, -0.005, +0.007, +0.020, +0.023, marching in one
+direction across ten years. At five points that is worth nothing on its own, but it is the
+first sign in this study of the effect being unstable over time, and it is what an
+out-of-sample split would be testing.
+
+---
 
 ### What would it take
 
@@ -220,11 +265,8 @@ result does not depend on the choice.
   measured, t = +0.79.
 - ~~Autocorrelation between consecutive weeks~~ **DONE:** measured at lags 1 to 10 and a
   Newey-West standard error applied. It is negligible and does not change the conclusion.
-- **The parametric cross-check:** regress forward return on signal and read the slope and
-  its standard error. It fails differently from the bucket test, since a regression assumes
-  linearity and would average a tail-only effect into a weak slope, while buckets assume
-  nothing. Agreement between the two is evidence; disagreement is more interesting than
-  either number.
+- ~~The parametric cross-check~~ **DONE:** Fama-MacBeth, mean slope +0.00118, t = +0.109.
+  It disagrees in sign with the bucket test and the disagreement is the finding.
 - **Robustness at 3, 5 and 10 buckets**, and on the five-trading-day grid. If the conclusion
   flips on the bucket count then there is no result.
 - **Out-of-sample split.**
@@ -241,6 +283,7 @@ python download.py      # fetch and cache the universe, one CSV per ticker
 python signal_build.py  # build the signal and forward-return panels
 python buckets.py       # rank, bucket, and print the headline table
 python errorbars.py     # autocorrelation, standard errors, t-stat, Sharpe
+python parametric.py    # Fama-MacBeth cross-check: one regression per week
 ```
 
 Plain scripts, no notebooks. Each runs top to bottom with no hidden state. Raw data is
