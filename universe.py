@@ -16,6 +16,6 @@ TICKERS = [
     "ISRG", "CMCSA", "NEE", "PFE", "SPGI", "RTX", "UBER", "AXP", "AMAT", "HON",
     "UNP", "LOW", "GS", "BKNG", "ETN", "PGR", "COP", "MS", "T", "BLK",
     "TJX", "SYK", "C", "BSX", "LMT", "VRTX", "MDT", "ADP", "SCHW", "CB",
-    "MMC", "PLD", "ADI", "GILD", "DE", "MU", "REGN", "ELV", "LRCX", "SBUX",
+    "MRSH", "PLD", "ADI", "GILD", "DE", "MU", "REGN", "ELV", "LRCX", "SBUX",
     "BMY", "MDLZ", "KLAC", "SO", "CI", "PANW", "INTC", "DUK", "ZTS", "MO",
 ]
