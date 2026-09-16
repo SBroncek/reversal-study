@@ -310,8 +310,24 @@ result does not depend on the choice.
   buying winners, i.e. momentum, which is documented at a ~12-month lookback, not a week.
   The month-by-month grid cell leaned that way (t −1.04, not significant). Worth its own
   pre-registered test at its standard horizon, not a reason to trade the blocks' drift.
-- **Transaction costs.** Does the spread survive 5 bp? 10 bp? At +0.0855 %/week, 5 bp of
-  round-trip cost is a large fraction of the whole effect.
+- ~~Transaction costs~~ **DONE (`costs.py`): does not survive realistic costs.** The
+  result is the return of a portfolio LONG bucket 1 and SHORT bucket 5, so costs are paid
+  on both legs. Cost is charged on money traded: fully replacing one leg trades 2x its
+  value, so weekly cost on the spread = (turnover_1 + turnover_5) x 2 x cost per trade.
+  Measured turnover: bucket 1 0.787, bucket 5 0.783, against 0.800 for random picks
+  (membership is no more persistent than chance). Pre-committed: net <= 0 at 5 bp means stop.
+
+  | cost per trade (modelled) | weeks | net spread %/wk | t |
+  |---|---|---|---|
+  | 0 bp | 520 | +0.092 | +0.85 |
+  | 5 bp | 520 | -0.065 | -0.60 |
+  | 10 bp | 520 | -0.222 | -2.06 |
+
+  **Break-even ~2.9 bp per trade** (arithmetic). **The t of -2.06 at 10 bp is NOT a finding
+  about markets:** the error bar barely moves when a near-constant is subtracted, so a
+  large enough assumed cost pushes any near-zero mean past two error bars. It says only
+  that this strategy would lose money at that cost. Understated if anything: the weight
+  resets needed to keep equal weights as prices drift are not charged.
 - **The Monday-open execution lag.**
 
 ---
