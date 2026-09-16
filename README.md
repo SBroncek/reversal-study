@@ -269,6 +269,23 @@ result does not depend on the choice.
   It disagrees in sign with the bucket test and the disagreement is the finding.
 - **Robustness at 3, 5 and 10 buckets**, and on the five-trading-day grid. If the conclusion
   flips on the bucket count then there is no result.
+- ~~Lookback and holding period~~ **DONE (16 Sept), `grid.py`:** every pairing of 1, 5 and
+  21 trading days, re-ranking only once each hold has finished so no two forward returns
+  share a day (21-day hold: 118 observations). All nine cells reported, none singled out.
+  Measured t, rows = lookback, columns = hold:
+
+  | lookback \ hold | 1 | 5 | 21 |
+  |---|---|---|---|
+  | **1** | +1.49 | +0.10 | −1.08 |
+  | **5** | +0.84 | +1.04 | −0.22 |
+  | **21** | +0.26 | −0.47 | −1.04 |
+
+  No cell is significant. The month-by-month cell, the one the literature points to and
+  the one predicted in advance to be strongest, leans toward momentum (winners keep
+  winning), not reversal. The largest t is one-day by one-day, +0.04 %/day gross, but that
+  cell trades the whole book daily and 5 bp each way costs more than twice the edge, so
+  **even the best cell is nothing after costs.** The 5x5 cell (t = +1.04) sits close to the
+  calendar-week headline (+0.79), so the Friday grid is not driving the result.
 - **Out-of-sample split.**
 - **Transaction costs.** Does the spread survive 5 bp? 10 bp? At +0.0855 %/week, 5 bp of
   round-trip cost is a large fraction of the whole effect.
