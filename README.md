@@ -286,7 +286,30 @@ result does not depend on the choice.
   cell trades the whole book daily and 5 bp each way costs more than twice the edge, so
   **even the best cell is nothing after costs.** The 5x5 cell (t = +1.04) sits close to the
   calendar-week headline (+0.79), so the Friday grid is not driving the result.
-- **Out-of-sample split.**
+- ~~Sub-period stability~~ **DONE (16 Sept), `subperiods.py`, on 100 names:** the weekly
+  spread in five consecutive two-year blocks, block length fixed before looking.
+
+  | block | spread %/wk | t | t (NW) |
+  |---|---|---|---|
+  | 2016-09 → 2018-08 | +0.176 | +1.23 | +1.52 |
+  | 2018-09 → 2020-08 | +0.324 | +1.04 | +0.91 |
+  | 2020-09 → 2022-08 | −0.004 | −0.02 | −0.02 |
+  | 2022-09 → 2024-08 | −0.013 | −0.06 | −0.06 |
+  | 2024-08 → 2026-08 | −0.029 | −0.11 | −0.14 |
+
+  No block is significant, so the pre-committed one-year shift of the cut points was not
+  triggered. The pattern is the informative part: **whatever reversal there is sits in
+  2016–2020 and is flat since**, and the ten-year average dilutes it. Why is not testable
+  here. The last three blocks drifting slightly negative is not a trend: each is zero
+  within noise.
+- ~~Out-of-sample split~~ **NOT RUN, deliberately.** Out-of-sample tests a setting chosen
+  in-sample. No setting was significant in-sample, so there was nothing to carry out.
+- **Next questions, not this study.** (1) *Did reversal exist before 2016?* Needs
+  point-in-time index membership: going back with today's large caps makes survivorship
+  bias worse the further back it goes. (2) *Momentum.* Flipping the weekly spread is
+  buying winners, i.e. momentum, which is documented at a ~12-month lookback, not a week.
+  The month-by-month grid cell leaned that way (t −1.04, not significant). Worth its own
+  pre-registered test at its standard horizon, not a reason to trade the blocks' drift.
 - **Transaction costs.** Does the spread survive 5 bp? 10 bp? At +0.0855 %/week, 5 bp of
   round-trip cost is a large fraction of the whole effect.
 - **The Monday-open execution lag.**
