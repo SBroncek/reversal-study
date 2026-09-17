@@ -61,12 +61,16 @@ from signal_build import build
 # Fewer names than this in a week and the ranking is not worth cutting into five
 # groups: at 20 names a bucket is 4 stocks and the average is mostly noise.
 #
-# Exactly one week in this panel trips it, and it is not a data-quality week: the
+# On the signal side, one week trips it and it is not a data-quality week: the
 # FIRST anchor (2016-08-26) has no prior week to compute a signal from, so every
-# name is NaN and the count is 0. This guard is what drops it, and it is one half
-# of the README's "521 of 523". The other half is the LAST anchor, which has a
-# full signal and no forward return; this guard never sees that, because it only
-# inspects the signal side. bucket_means catches it separately.
+# name is NaN and the count is 0.
+#
+# bucket_means applies the SAME threshold to the forward side, which is what ends
+# the sample. Rewritten 17 Sept. The cache holds anchors out to 18 Sept 2026, but
+# only one ticker has data past 25 Aug, so every week after 21 Aug 2026 fails the
+# forward test and the sample ends there. Consequence worth having: the sample end
+# is now a property of the DATA COVERAGE rather than of whatever the cache last
+# happened to hold, so re-downloading cannot quietly move the published numbers.
 #
 # Every other week carries 98 or 99 names, so the 40-name threshold rejects
 # nothing on data-quality grounds today. It starts rejecting weeks once the
@@ -106,7 +110,16 @@ def bucket_means(signal: pd.DataFrame, forward: pd.DataFrame,
         # reindex to the names that got a bucket, in that order, so the forward
         # returns line up with the labels positionally as well as by name.
         fwd = forward.loc[week].reindex(b.index)
-        if fwd.isna().all():          # the final week has no forward return
+        # A week needs MIN_NAMES on BOTH sides, not just the signal side. The old
+        # test was `fwd.isna().all()`, which only caught a week with nothing at
+        # all and let through a week carrying a handful of names. Found 17 Sept:
+        # MRSH had been re-downloaded on its own after the MMC ticker change, so
+        # its cache ran 3 weeks past the other 99. The week of 28 Aug 2026 then
+        # had ONE forward return, that name landed in bucket 3, and the week
+        # entered the table with four empty buckets and one stock standing in for
+        # the market. A short week is harmless; a week that is one name wearing
+        # the market's clothes is not, because it looks like data.
+        if fwd.notna().sum() < MIN_NAMES:
             continue
         rows[week] = fwd.groupby(b, observed=True).mean()
 

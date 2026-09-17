@@ -41,17 +41,23 @@ WEEKS_PER_YEAR = 52
 def weekly_spread(means: pd.DataFrame) -> pd.Series:
     """The study's actual sample: one bucket-1-minus-bucket-5 number per week."""
     lo, hi = means.columns[0], means.columns[-1]
-    # dropna is a FORWARD-LOOKING GUARD AND DOES NOT CURRENTLY FIRE: the means
-    # table has zero NaN cells, because qcut always fills all five buckets and
-    # bucket_means drops a week whole rather than partially. Verified 3 Sept.
-    # It would start doing work if buckets were ever cut on raw values (pd.cut,
-    # equal-WIDTH bands) instead of ranks, since a calm week can leave such a band
-    # empty. Kept because a subtraction against NaN would then silently shorten
-    # the sample rather than announcing itself.
+    # dropna: CORRECTED 17 Sept. The old comment said this guard never fires. It
+    # was firing, and it was the only thing catching a bad week. A week whose
+    # forward returns covered a single name reached the means table with four of
+    # five buckets empty, and this dropna silently removed it, which is why
+    # buckets.py printed 522 weeks while this file printed 521. Silently removing
+    # a broken week is not a fix, because the same week still polluted the column
+    # averages in buckets.py. The real guard now lives in bucket_means, which
+    # requires MIN_NAMES forward returns before a week is built at all.
     #
-    # The 523 -> 521 does NOT happen here. It happens in bucket_means, and it is
-    # the first anchor (no prior week, so no signal) and the last (no following
-    # week, so no forward return). One lost at each end, both structural.
+    # Kept, for two reasons. It is the reason the discrepancy was visible at all,
+    # and it would do real work if buckets were ever cut on raw values (pd.cut,
+    # equal-WIDTH bands) instead of ranks, since a calm week can leave such a band
+    # empty. A subtraction against NaN would otherwise shorten the sample quietly.
+    #
+    # The 526 anchors become 521 weeks in bucket_means, not here. Losses are:
+    # the first anchor (no prior week, so no signal) and the last four (only one
+    # ticker has data past 25 Aug 2026, so no week after 21 Aug clears MIN_NAMES).
     return (means[lo] - means[hi]).dropna()
 
 

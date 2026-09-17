@@ -86,7 +86,22 @@ if __name__ == "__main__":
     print(f"\n  slopes negative in {(slopes < 0).sum()} of {len(slopes)} weeks "
           f"({100 * (slopes < 0).mean():.1f}%)")
 
-    # The bucket test reports +0.0855 %/week at t = +0.79, which leans the other
-    # way. Neither is distinguishable from zero; the disagreement in sign is the
-    # finding, and it is what a straight line does to a non-monotonic sort.
-    print("\n  compare: bucket spread +0.0855 %/week at t = +0.79 (opposite sign)")
+    # Computed live, not quoted. This line held a hard-coded +0.0855 at t = +0.79
+    # from an earlier 99-name run and was still printing it after the universe
+    # changed, which is a stale surface inside the code itself (fixed 17 Sept).
+    #
+    # The two disagree in ECONOMIC direction, which is not the same as disagreeing
+    # in printed sign, and the old comment conflated them. Both numbers print
+    # positive. The signal here is the past-week return, so a positive SLOPE means
+    # last week's winners did better, which is momentum. A positive bucket SPREAD
+    # is bucket 1 minus bucket 5, last week's losers minus last week's winners,
+    # which is reversal. Same sign on the page, opposite claim about the world.
+    from buckets import bucket_means, summarise
+    from errorbars import weekly_spread
+    means = bucket_means(signal, forward)
+    spread = weekly_spread(means)
+    t_spread = spread.mean() / (spread.std(ddof=1) / np.sqrt(len(spread)))
+    print(f"\n  compare: bucket spread {spread.mean() * 100:+.4f} %/week at "
+          f"t = {t_spread:+.2f}, over {len(spread)} weeks")
+    print("    slope positive means momentum, bucket spread positive means "
+          "reversal, so these two lean opposite ways")
