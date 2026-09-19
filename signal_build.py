@@ -5,7 +5,7 @@ Spec (fixed 25 Aug):
   forward return = the same stock's return over the NEXT 5 trading days
   the two windows SHARE NO DAYS
 
-Implementation note (Sam's call, 28 Aug): a "week" is a CALENDAR week, anchored on
+Implementation note (decided 28 Aug): a "week" is a CALENDAR week, anchored on
 the Friday close. Chosen over fixed 5-trading-day blocks because it is the grid a
 strategy would actually be rebalanced on. Cost: 18.5% of weeks in the sample are
 holiday-shortened, so the weekly observations are not identically scaled. The

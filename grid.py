@@ -1,7 +1,7 @@
 """Stage 4b: the lookback x holding-period grid.
 
 Each cell ranks stocks on their past `lookback` trading days and measures the next
-`hold` trading days. Re-ranking happens only once the hold has finished (Sam's call,
+`hold` trading days. Re-ranking happens only once the hold has finished (decided
 16 Sept), so no two forward returns share a day and no overlap correction is needed.
 Cost: a 21-day hold gives ~125 observations instead of ~520.
 

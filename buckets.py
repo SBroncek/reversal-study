@@ -5,7 +5,7 @@ THE HEADLINE NUMBER: bucket 1 (last week's biggest losers) minus bucket 5 (last
 week's biggest winners), averaged over every week in the sample. Positive means
 losers went on to outperform winners, i.e. reversal.
 
-Two conventions fixed here, both surfaced to Sam before they were written:
+Two conventions fixed here, both decided before the code was written:
 
   RANKS, NOT RAW VALUES. Buckets are cut on the RANK of the signal, so every
   bucket holds the same number of names every week. Cutting on the raw return

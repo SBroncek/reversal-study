@@ -23,8 +23,8 @@ week tends to pay next week, so the series is autocorrelated. Positive
 autocorrelation makes s/sqrt(T) TOO SMALL, which makes a study look MORE
 significant than it is, not less. So the autocorrelation is measured first and
 printed, and then a Newey-West standard error is reported next to the naive one.
-Both are shown deliberately. Quoting only the flattering one is the same failure as
-reporting bucket 1 minus bucket 4.
+Both are shown deliberately. Quoting only the more optimistic one is the same
+failure as reporting bucket 1 minus bucket 4.
 
 NO PER-BUCKET T-STATS. Testing whether bucket 3's mean forward return differs from
 zero would be testing whether the stock market went up over ten years. It did. That

@@ -33,7 +33,7 @@ def week_slope(x: pd.Series, y: pd.Series) -> float:
     one regressor there is nothing a solver would add, and this way the
     quantity in the denominator is visible.
     """
-    pair = pd.concat([x, y], axis=1).dropna()      # [scaffold] a name needs BOTH numbers to be a dot
+    pair = pd.concat([x, y], axis=1).dropna()      # a name needs both numbers to be a point
     if len(pair) < MIN_NAMES:
         return np.nan
 
@@ -66,7 +66,7 @@ def fama_macbeth(slopes: pd.Series) -> dict:
     """
     n = len(slopes)
     mean = slopes.mean()
-    sd = slopes.std(ddof=1)          # [scaffold] ddof=1: sample SD, divides by n-1
+    sd = slopes.std(ddof=1)          # sample SD, divides by n-1
     se = sd / np.sqrt(n)
     return {"n_weeks": n, "mean": mean, "sd": sd, "se": se, "t": mean / se}
 

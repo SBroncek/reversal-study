@@ -3,8 +3,8 @@
 WARNING: this is today's membership, not point-in-time. These are names that are
 large caps *now*, which means the list already knows which companies survived and
 grew. Anything that was dropped from the index, got acquired, or went bust is
-missing. Any result computed on this list is flattered by that survivorship bias,
-and the README has to say so.
+missing. Any result computed on this list is made optimistic by that survivorship
+bias, and the README has to say so.
 """
 
 TICKERS = [

@@ -1,7 +1,7 @@
 """Charts for the README. Reads nothing new: same panel, same functions.
 
-WHY THIS FILE EXISTS (Sam, 15 Sept): the bucket shape was being argued over by
-reading rows of numbers, and both of us misread which end the steep part was on.
+WHY THIS FILE EXISTS: the bucket shape was being argued over by reading rows of
+numbers, and I misread which end the steep part was on.
 A shape claim needs a picture, or it is a guess about decimals.
 
 The error bars are +/- 1 standard error of that bucket's mean, computed the same
@@ -10,8 +10,8 @@ SE is their standard deviation over weeks divided by sqrt(number of weeks). It i
 NOT the spread of individual stocks, because a stock is not an observation here, a
 week is.
 
-NO CAPTION ON THE FIGURE (Sam, 19 Sept): "its just the visual for the data and it
-just goes where the table is". The chart states nothing the table does not. The
+NO CAPTION ON THE FIGURE. It is the visual for the data and it goes where the
+table is. The chart states nothing the table does not. The
 old suptitle asserted that every error bar spans the dotted mean and no bucket is
 distinguishable, which was TRUE on the 99-name panel and is FALSE on this one:
 at 10 buckets, bucket 1 runs [+0.404, +0.701] against a grand mean of +0.378.
@@ -20,8 +20,8 @@ actual test is bucket 1 against bucket 5 with its own error bar. A figure that
 argues is a figure that can go stale. This one only draws.
 
 TWO FILES, one per table it illustrates. bucket_shape.png is the five-bucket cut,
-which is the pre-specified one, and sits with the bucket means table. Sam's rule
-is that the visual goes where its table is.
+which is the pre-specified one, and goes with the bucket means table. Each visual
+goes where its table is.
 """
 
 import matplotlib
