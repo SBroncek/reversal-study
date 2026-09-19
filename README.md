@@ -85,7 +85,9 @@ error by roughly the square root of 100 and manufacture a false discovery.
 | annualised Sharpe ratio | **0.267** |
 
 At this mean and this variability, reaching t = 2 would need about **2,900 weeks, or 56
-years**, of data. The sample is 10 years.
+years**, of data. The sample is 10 years. This divides by the measured mean, and the
+measured mean cannot be told apart from zero. If the truth is smaller, 56 years is too
+short. If the truth is zero, no amount of data gets there.
 
 ---
 
@@ -166,8 +168,9 @@ signal would do, but no cut is close to significant. Ten buckets of ten names is
 
 **Lookback and holding period.** Every pairing of 1, 5 and 21 trading days, re-ranking
 only once each hold has finished so that no two forward returns share a day. The 21 day
-hold leaves 118 observations. Values
-are t-statistics.
+hold leaves 118 observations. Every combination that was run is in the table, including
+the ones that look worst. Values are t-statistics, rows are the lookback and columns are
+the hold.
 
 | lookback, hold | 1 | 5 | 21 |
 |---|---|---|---|
@@ -192,8 +195,9 @@ block length fixed before looking.
 | 2022-09 to 2024-08 | -0.013 | -0.06 | -0.06 |
 | 2024-08 to 2026-08 | -0.029 | -0.11 | -0.14 |
 
-No block is significant. Whatever reversal is in this sample sits
-in 2016 to 2020 and is flat since, and the ten-year average dilutes it. Why this is the case is an interesting question but not one for this study. The last three blocks drifting slightly negative is not a trend, because
+No block is significant, so the planned check of shifting the block boundaries by a year
+was not needed. What reversal there is in this sample is in 2016 to 2020 and flat
+afterwards, and the ten-year average dilutes it. Why this is the case is an interesting question but not one for this study. The last three blocks drifting slightly negative is not a trend, because
 each is zero given the noise.
 
 ---
@@ -205,7 +209,12 @@ replacing one leg trades twice its value, so the weekly cost on the spread is
 (turnover of bucket 1 plus turnover of bucket 5) x 2 x the cost per trade.
 
 **Measuring turnover.** Measured weekly turnover is 0.787
-for bucket 1 and 0.783 for bucket 5, against 0.800 for random picks. So names staying in the same bucket is no more likely than random selection.
+for bucket 1 and 0.783 for bucket 5, against 0.800 for random picks. So names staying in the same bucket is no more likely than
+random selection.
+
+The threshold was decided before the numbers were crunched. If the net spread at 5 basis
+points was zero or below, it did not survive transaction costs and no further testing on
+transaction costs is to be done.
 
 | cost per trade, modelled | weeks | net spread, % per week | t |
 |---|---|---|---|
@@ -266,8 +275,9 @@ column itself, so the study reports a perfect relationship.
 Checked directly on a single name. AAPL, anchor Friday 27 March 2026, gives 247.55, then
 248.36, then 255.46, so a signal of +0.33 % and a forward return of +2.86 %, both confirmed
 against the three dates read in order. Three structural checks also pass. The signal is
-shares no days with the first anchor, the forward return is shares no days with the last, and the
-signal at week a+1 equals the forward return at week a exactly.
+missing for every stock in the first week, because there is no week before it. The forward
+return is missing for every stock in the last week, for the same reason at the other end.
+And the signal at week a+1 equals the forward return at week a exactly.
 
 ---
 
