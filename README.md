@@ -287,8 +287,8 @@ And the signal at week a+1 equals the forward return at week a exactly.
 
 ## Where this study is wrong
 
- These are the ways the
-headline is overstated, in descending order of how much they matter.
+These are the ways the headline is overstated, in descending order of how much
+they matter.
 
 **1. Survivorship.** The universe is today's membership, so the
 panel contains zero delistings over ten years. A real 100-stock universe tracked over a
