@@ -14,7 +14,7 @@ biggest losers) and short bucket 5 (the biggest winners).
 | before costs | +0.091 | +0.84 |
 | after 5 basis points | -0.065 | -0.60 |
 
-The universe is today's survivors, which
+Even the before-costs figure is optimistic. The universe is today's survivors, which
 matters most for a strategy that buys losers. See [where this study is
 wrong](#where-this-study-is-wrong).
 
@@ -48,12 +48,12 @@ Mean forward return by bucket, in % per week, over 521 weeks.
 |---|---|---|---|---|---|
 | mean forward return | **+0.487** | +0.370 | +0.331 | +0.306 | **+0.396** |
 
-> **Spread (bucket 1 minus bucket 5), is +0.091 % per week, t = +0.84.**
+> **Spread (bucket 1 minus bucket 5) is +0.091 % per week, t = +0.84.**
 
 The sign points the way reversal predicts. The spread sits less
 than one standard error from zero.
 
-**An observation about the shape** Buckets 1 to 4 slide
+**An observation about the shape.** Buckets 1 to 4 slide
 downward as reversal predicts, and bucket 5 then ticks back up above bucket 4. That could
 be reversal at one end and momentum at the other, but it is five points with no error bar
 on any individual bucket, and it is not a finding. The sub-period test below
@@ -61,9 +61,9 @@ shows the spread itself is not stable over the decade.
 
 ### The spread from bucket 1 to bucket 4
 
-**Bucket 1 minus bucket 4 is +0.182 % per week**
+**Bucket 1 minus bucket 4 is +0.182 % per week.**
 
-Tt is twice the value that the study found, but reporting it would mean choosing a better result after seeing the data. Bucket 1 against bucket 5 was specified
+It is twice the value that the study found, but reporting it would mean choosing a better result after seeing the data. Bucket 1 against bucket 5 was specified
 before the data was touched, so that is what gets reported.
 
 ### How significant is +0.091 %?
@@ -91,13 +91,15 @@ years**, of data. The sample is 10 years.
 
 ## The autocorrelation correction, which turned out not to matter
 
-Weekly spreads were expected to be positively autocorrelated, which would make the naïve
+Weekly spreads were expected to be positively autocorrelated, which would make the naive
 standard error too small and the study look more significant than it is. It was measured
-and found to be negligible. Lags 1 to 3 come in at +0.003, +0.002 and +0.001.
+and found to be negligible. Lags 1 to 3 come in at +0.003, +0.002 and +0.001. Lag 4 was
+negative at -0.135, a roughly monthly reversal. Since it is negative, it makes the naive
+standard error conservative rather than optimistic. It has not been investigated further.
 
-A Newey-West standard error, which adds the covariance terms the naïve formula omits,
+A Newey-West standard error, which adds the covariance terms the naive formula omits,
 moves the t-statistic from +0.84 to +0.87. Because the residual dependence is slightly
-negative overall, the naïve standard error is if anything the conservative one here. The
+negative overall, the naive standard error is if anything the conservative one here. The
 conclusion is consistent across every lag from 0 to 20, the most generous of which reaches
 t = +1.01.
 
@@ -132,11 +134,11 @@ return, so a positive slope means last week's winners did better, which is momen
 positive bucket spread is losers minus winners, which is reversal. Same sign, opposite
 claim about the world.
 
-Neither is distinguishable from zero. The slope one twelfth of a standard error from zero and 51.4 % of weekly slopes are
+Neither is distinguishable from zero. The slope is one twelfth of a standard error from zero and 51.4 % of weekly slopes are
 negative. In plain terms the slope says a stock that fell 10 % further than another last
 week went on to make about 0.01 % less the next week, which is not really an effect.
 
-**Linear regression assumes the shape of the data** A
+**Linear regression assumes the shape of the data.** A
 linear regression is an approximation with a line. Given a sort where both ends do
 well, it averages whatever is happening on the left against whatever is happening on the
 right and returns approximately nothing. The bucket test can see an uneven sort
@@ -176,7 +178,8 @@ are t-statistics.
 No cell is significant. The month by month cell, predicted in advance to be strongest, leans toward momentum rather than reversal. The
 largest t is one day by one day at +0.04 % per day gross, but that cell trades the whole
 book every day and 5 basis points each way costs more than twice the edge, so even the
-best cell is nothing after costs.
+best cell is nothing after costs. The five by five cell at t = +1.07 sits close to the
+calendar-week headline, so the Friday anchoring is not driving the result.
 
 **Sub-period stability.** The weekly spread in five consecutive two-year blocks, with the
 block length fixed before looking.
@@ -201,8 +204,8 @@ The result is the return of a portfolio long bucket 1 and short bucket 5. Cost i
 replacing one leg trades twice its value, so the weekly cost on the spread is
 (turnover of bucket 1 plus turnover of bucket 5) x 2 x the cost per trade.
 
-**Measuring turnover** Measured weekly turnover is 0.787
-for bucket 1 and 0.783 for bucket 5, against 0.800 for random picks. So names staying in the same bucket is no more likely than random selection. 
+**Measuring turnover.** Measured weekly turnover is 0.787
+for bucket 1 and 0.783 for bucket 5, against 0.800 for random picks. So names staying in the same bucket is no more likely than random selection.
 
 | cost per trade, modelled | weeks | net spread, % per week | t |
 |---|---|---|---|
@@ -210,7 +213,7 @@ for bucket 1 and 0.783 for bucket 5, against 0.800 for random picks. So names st
 | 5 basis points | 520 | -0.065 | -0.60 |
 | 10 basis points | 520 | -0.222 | -2.06 |
 
-**Break-even is about 2.9 basis points per trade**
+**Break-even is about 2.9 basis points per trade.**
 
 **The t of -2.06 at 10 basis points is not a finding about markets.** The error bar barely
 moves when a near-constant is subtracted, so a large enough assumed cost pushes any
@@ -246,7 +249,7 @@ ten years and subtracting once. The two agree exactly when both buckets exist in
 week. If not, the weekly version never compares bucket 1 over one set of
 weeks against bucket 5 over a different set.
 
-**Missing data is dropped** A stock with no signal in a given week is
+**Missing data is dropped.** A stock with no signal in a given week is
 excluded from that week's ranking. No number is better than an incorrect number.
 
 **A week must carry at least 40 names on both sides.** The same threshold applies to the
@@ -273,7 +276,7 @@ signal at week a+1 equals the forward return at week a exactly.
  These are the ways the
 headline is overstated, in descending order of how much they matter.
 
-**1. Survivorship** The universe is today's membership, so the
+**1. Survivorship.** The universe is today's membership, so the
 panel contains zero delistings over ten years. A real 100-stock universe tracked over a
 decade does not have zero delistings. Every name in this sample survived by construction.
 That biases the study toward optimism and it does so most sharply for a signal that buys
@@ -285,7 +288,7 @@ up to t, so the test itself does not look forward. Picking the tickers, however,
 knowing which firms still exist in 2026. That leak is baked in and cannot be removed
 without point-in-time index membership data.
 
-**3. Equal weighting** Equal weight was chosen because any weighting
+**3. Equal weighting.** Equal weight was chosen because any weighting
 scheme is a secondary hypothesis, and if the study fails you cannot
 tell which hypothesis failed. Equal weight tilts toward smaller and less
 liquid names, which is exactly where reversal is strongest and where trading costs are
@@ -329,7 +332,7 @@ Every choice in the study, and whether it was tested or merely declared.
 - **The Monday-open execution lag.** The Open column exists in the cached data, so this is
   runnable and simply has not been run.
 - **Market cap weighting.** Not possible with the data held, which is prices only.
-- **Out-of-sample split** An out-of-sample test validates a
+- **Out-of-sample split.** An out-of-sample test validates a
   setting chosen in-sample. No setting was significant in-sample, so there was nothing to
   carry out.
 - **Two questions this study cannot answer.** First, whether reversal existed before 2016,
