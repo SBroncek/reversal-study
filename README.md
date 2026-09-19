@@ -50,7 +50,7 @@ Mean forward return by bucket, in % per week, over 521 weeks.
 
 > **Spread (bucket 1 minus bucket 5) is +0.091 % per week, t = +0.84.**
 
-The sign points the way reversal predicts. The spread sits less
+The sign points the way reversal predicts. The spread is less
 than one standard error from zero.
 
 **An observation about the shape.** Buckets 1 to 4 slide
@@ -63,8 +63,8 @@ shows the spread itself is not stable over the decade.
 
 **Bucket 1 minus bucket 4 is +0.182 % per week.**
 
-It is twice the value that the study found, but reporting it would mean choosing a better result after seeing the data. Bucket 1 against bucket 5 was specified
-before the data was touched, so that is what gets reported.
+It is twice the value that the study found, but reporting it would mean choosing a better result after seeing the data. I specified
+bucket 1 against bucket 5 before touching the data, so that is what I report.
 
 ### How significant is +0.091 %?
 
@@ -148,8 +148,8 @@ because it assumes no shape. So the regression does not correct the bucket test 
 the more rigorous of the two. It is blind to the feature of the data that is
 interesting.
 
-Neither number is reported as the finding. What is reported is that a linear specification
-cannot represent this sort.
+Neither number is the finding. The finding is that a linear specification cannot represent
+this sort.
 
 ---
 
@@ -181,11 +181,11 @@ the hold.
 No cell is significant. The month by month cell, predicted in advance to be strongest, leans toward momentum rather than reversal. The
 largest t is one day by one day at +0.04 % per day gross, but that cell trades the whole
 book every day and 5 basis points each way costs more than twice the edge, so even the
-best cell is nothing after costs. The five by five cell at t = +1.07 sits close to the
+best cell is nothing after costs. The five by five cell at t = +1.07 is close to the
 calendar-week headline, so the Friday anchoring is not driving the result.
 
-**Sub-period stability.** The weekly spread in five consecutive two-year blocks, with the
-block length fixed before looking.
+**Sub-period stability.** The weekly spread in five consecutive two-year blocks. I fixed
+the block length before looking.
 
 | block | spread, % per week | t | t, Newey-West |
 |---|---|---|---|
@@ -204,7 +204,7 @@ each is zero given the noise.
 
 ## Transaction costs
 
-The result is the return of a portfolio long bucket 1 and short bucket 5. Cost is charged on money traded, and fully
+The result is the return of a portfolio long bucket 1 and short bucket 5. I charge cost on money traded, and fully
 replacing one leg trades twice its value, so the weekly cost on the spread is
 (turnover of bucket 1 plus turnover of bucket 5) x 2 x the cost per trade.
 
@@ -212,8 +212,8 @@ replacing one leg trades twice its value, so the weekly cost on the spread is
 for bucket 1 and 0.783 for bucket 5, against 0.800 for random picks. So names staying in the same bucket is no more likely than
 random selection.
 
-The threshold was decided before the numbers were crunched. If the net spread at 5 basis
-points was zero or below, it did not survive transaction costs and no further testing on
+I decided the threshold before crunching the numbers. If the net spread at 5 basis points
+was zero or below, it did not survive transaction costs and no further testing on
 transaction costs is to be done.
 
 | cost per trade, modelled | weeks | net spread, % per week | t |
@@ -234,7 +234,7 @@ keep the legs equally weighted as prices drift are not charged.
 
 ## Method
 
-**Universe.** 100 US large caps, chosen from today's index membership. Daily adjusted
+**Universe.** 100 US large caps, which I chose from today's index membership. Daily adjusted
 closes from Yahoo Finance, stored to local CSV.
 
 **Week.** A calendar week anchored on the Friday close. 96 of the 521 weeks, or 18.4 %,
@@ -245,7 +245,7 @@ against each other that week, so the question is never whether a stock fell 3 % 
 whether it fell further than the other 99.
 
 **Forward return.** The same stock's return over the following week, sharing no days with
-the signal window. Verified by hand.
+the signal window. I verified this by hand.
 
 **Buckets.** The ranked cross-section is cut into 5 equal-sized groups of about 20. Bucket
 1 holds the biggest losers and bucket 5 the biggest winners. Cutting on ranks rather than
@@ -272,7 +272,7 @@ because only one ticker in the cache has prices past 25 August 2026.
 One of the easiest things to go wrong on a study like this is a misplaced value. One character, no error raised, and the forward return becomes the signal
 column itself, so the study reports a perfect relationship.
 
-Checked directly on a single name. AAPL, anchor Friday 27 March 2026, gives 247.55, then
+I checked it directly on a single name. AAPL, anchor Friday 27 March 2026, gives 247.55, then
 248.36, then 255.46, so a signal of +0.33 % and a forward return of +2.86 %, both confirmed
 against the three dates read in order. Three structural checks also pass. The signal is
 missing for every stock in the first week, because there is no week before it. The forward
@@ -298,7 +298,7 @@ up to t, so the test itself does not look forward. Picking the tickers, however,
 knowing which firms still exist in 2026. That leak is baked in and cannot be removed
 without point-in-time index membership data.
 
-**3. Equal weighting.** Equal weight was chosen because any weighting
+**3. Equal weighting.** I chose equal weight because any weighting
 scheme is a secondary hypothesis, and if the study fails you cannot
 tell which hypothesis failed. Equal weight tilts toward smaller and less
 liquid names, which is exactly where reversal is strongest and where trading costs are
@@ -311,8 +311,8 @@ assumes the weekly observations are the same kind of object, and under a calenda
 they are not quite. This is roughly an 11 % scale difference on 18.4 % of the observations
 and it is not corrected for.
 
-**5. Execution assumes the closing auction.** Positions are assumed to be entered at the
-same Friday close used to compute the signal. That is achievable through the closing
+**5. Execution assumes the closing auction.** I assume positions are entered at the same
+Friday close used to compute the signal. That is achievable through the closing
 auction, where a large volume genuinely does trade at the official closing print, but
 market-on-close orders must be submitted a few minutes before that, so the decision is
 really made on near close prices. The lagged version, entering at Monday's
