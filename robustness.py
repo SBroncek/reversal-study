@@ -21,8 +21,11 @@ What moves when it changes, and the two effects pull opposite ways:
   is the entire reason this file exists rather than an argument.
 
 A NOTE ON WHAT WOULD COUNT AS A FAILURE. This study's headline is a NULL: the
-quintile spread is +0.0855 %/week at t = +0.79, which is not distinguishable
-from zero. So the check here is not "does it stay significant" - it never was.
+quintile spread is a fraction of a percent per week at a t below 1, which is not
+distinguishable from zero. The live figures are printed by errorbars.py and are
+deliberately not repeated here, because a number copied into a docstring is a
+stale surface the moment the universe changes. So the check here is not "does it
+stay significant", since it never was.
 It is "does the SIGN stay put and does the magnitude stay the same order".
 A null that becomes a strong positive at 10 buckets and a strong negative at 3
 would mean the panel is being fitted, not measured.

@@ -1,4 +1,8 @@
-"""Stage 3, part 1: how confident can we actually be in +0.0855 %/week?
+"""Stage 3, part 1: how confident can we actually be in the headline spread?
+
+No number is quoted in this docstring on purpose. The one that used to sit here was
++0.0855, from a 99-name universe, and it was still being read as current after the
+universe changed. Every figure in this file is printed by a run.
 
 THE UNIT OF OBSERVATION IS THE WEEK. Not the stock, not the stock-week. The study
 makes one number per week (the bucket 1 minus bucket 5 spread), so the sample size
@@ -178,9 +182,46 @@ def report(d: pd.Series) -> None:
     print("   gap, not a power calculation. If the true mean is smaller, worse.)")
 
 
+def diversification(means: pd.DataFrame, forward: pd.DataFrame) -> None:
+    """Why the measured spread SD is what it is, rather than what independence predicts.
+
+    This block exists because the README states these five numbers, and a number
+    quoted in prose with no code behind it is a stale surface waiting to happen.
+    Every figure in that paragraph is printed here, so a re-run either reproduces
+    the README or contradicts it out loud.
+
+    The substantive point is that averaging 20 names inside a bucket does NOT cut
+    their noise by root 20, because all 20 carry the same week's market move. That
+    is the single assumption most likely to make a bucket study look significant
+    when it is not, and it is worth measuring rather than asserting.
+    """
+    lo, hi = means.columns[0], means.columns[-1]
+    b1, b5 = means[lo], means[hi]
+    spread = (b1 - b5).dropna()
+
+    sd_name = forward.stack().std(ddof=1)
+    n_per_bucket = 20
+
+    print("\n=== WHY THE SPREAD SD IS NOT THE DIVERSIFIED FIGURE ===")
+    print(f"  SD of one name's weekly forward return : {sd_name * 100:.4f} %")
+    print(f"  if 20 names were independent, / root 20: "
+          f"{sd_name / np.sqrt(n_per_bucket) * 100:.4f} %")
+    print(f"  two such buckets differenced, x root 2 : "
+          f"{sd_name * np.sqrt(2) / np.sqrt(n_per_bucket) * 100:.4f} %")
+    print(f"  MEASURED SD of bucket {lo} weekly mean   : {b1.std(ddof=1) * 100:.4f} %")
+    print(f"  MEASURED SD of bucket {hi} weekly mean   : {b5.std(ddof=1) * 100:.4f} %")
+    print(f"  corr(bucket {lo}, bucket {hi})               : {b1.corr(b5):.4f}")
+    print(f"  SD if those two were independent       : "
+          f"{np.sqrt(b1.var(ddof=1) + b5.var(ddof=1)) * 100:.4f} %")
+    print(f"  MEASURED SD of the spread              : {spread.std(ddof=1) * 100:.4f} %")
+    print("  So differencing does real work, and averaging inside a bucket does far")
+    print("  less than root 20 of it.")
+
+
 if __name__ == "__main__":
     panel = load_universe()
     signal, forward = build(panel)
     means = bucket_means(signal, forward)
 
     report(weekly_spread(means))
+    diversification(means, forward)

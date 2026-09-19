@@ -36,8 +36,10 @@ Two conventions fixed here, both surfaced to Sam before they were written:
   week and average the 521 results, rather than averaging each bucket over ten
   years and subtracting once.
 
-  On this panel the two routes agree to ten decimal places (+0.0855315612 either
-  way), because every bucket exists in every week. The choice therefore changes
+  On this panel the two routes agree to ten decimal places, because every bucket
+  exists in every week. They are not bit-identical, since the two sums accumulate
+  floating-point error in a different order, so compare them with a tolerance and
+  never with ==. Re-verified 19 Sept on the 100-name panel. The choice therefore changes
   no number today. It changes one as soon as a bucket goes missing in some week:
   average-then-difference would compare bucket 1's average over one set of weeks
   against bucket 5's average over a different set. Difference-then-average cannot,
