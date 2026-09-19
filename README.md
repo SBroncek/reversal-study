@@ -378,4 +378,16 @@ cached under `data/` and is not committed.
 
 ---
 
+## How this was built
+
+I directed the study and Claude wrote most of the code. The commit history carries the
+co-author trailers.
+
+The research decisions are mine: the universe, the signal and forward-return
+definitions, the rank cut into quintiles, bucket 1 against bucket 5 fixed before the data
+was touched, the 5 basis point cost threshold committed in advance, and the two-year block
+length. The alignment check was done by hand.
+
+---
+
 **Samuel Broncek.** MMath, University of Warwick, 2025.
