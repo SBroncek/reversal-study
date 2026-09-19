@@ -5,10 +5,23 @@ reading rows of numbers, and both of us misread which end the steep part was on.
 A shape claim needs a picture, or it is a guess about decimals.
 
 The error bars are +/- 1 standard error of that bucket's mean, computed the same
-way as everywhere else in this repo: the weekly bucket means are the data, so the
+way as everywhere else in this repo. The weekly bucket means are the data, so the
 SE is their standard deviation over weeks divided by sqrt(number of weeks). It is
-NOT the spread of individual stocks - a stock is not an observation here, a week
-is.
+NOT the spread of individual stocks, because a stock is not an observation here, a
+week is.
+
+NO CAPTION ON THE FIGURE (Sam, 19 Sept): "its just the visual for the data and it
+just goes where the table is". The chart states nothing the table does not. The
+old suptitle asserted that every error bar spans the dotted mean and no bucket is
+distinguishable, which was TRUE on the 99-name panel and is FALSE on this one:
+at 10 buckets, bucket 1 runs [+0.404, +0.701] against a grand mean of +0.378.
+That is one bar of ten clearing, which is about what noise gives, and the study's
+actual test is bucket 1 against bucket 5 with its own error bar. A figure that
+argues is a figure that can go stale. This one only draws.
+
+TWO FILES, one per table it illustrates. bucket_shape.png is the five-bucket cut,
+which is the pre-specified one, and sits with the bucket means table. Sam's rule
+is that the visual goes where its table is.
 """
 
 import matplotlib
@@ -24,7 +37,10 @@ OUT = "docs"
 
 
 def bucket_plot(signal, forward, counts=(3, 5, 10), path=f"{OUT}/bucket_shape.png"):
-    fig, axes = plt.subplots(1, len(counts), figsize=(13, 4), sharey=True)
+    w = 5.0 if len(counts) == 1 else 13.0
+    fig, axes = plt.subplots(1, len(counts), figsize=(w, 4), sharey=True,
+                             squeeze=False)
+    axes = axes[0]
 
     for ax, n in zip(axes, counts):
         means = bucket_means(signal, forward, n_buckets=n)
@@ -40,9 +56,6 @@ def bucket_plot(signal, forward, counts=(3, 5, 10), path=f"{OUT}/bucket_shape.pn
         ax.grid(alpha=.3)
 
     axes[0].set_ylabel("mean forward return, %/week")
-    fig.suptitle("Forward return by past-return bucket, with +/-1 SE. "
-                 "Every error bar spans the dotted mean: no bucket is distinguishable.",
-                 fontsize=9)
     fig.tight_layout()
     fig.savefig(path, dpi=130)
     print("wrote", path)
@@ -53,4 +66,6 @@ if __name__ == "__main__":
     os.makedirs(OUT, exist_ok=True)
     panel = load_universe()
     signal, forward = build(panel)
-    bucket_plot(signal, forward)
+    bucket_plot(signal, forward, counts=(5,), path=f"{OUT}/bucket_shape.png")
+    bucket_plot(signal, forward, counts=(3, 5, 10),
+                path=f"{OUT}/bucket_shape_counts.png")

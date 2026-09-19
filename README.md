@@ -48,6 +48,8 @@ Mean forward return by bucket, in % per week, over 521 weeks.
 |---|---|---|---|---|---|
 | mean forward return | **+0.487** | +0.370 | +0.331 | +0.306 | **+0.396** |
 
+![Mean forward return by bucket, with plus or minus one standard error](docs/bucket_shape.png)
+
 > **Spread (bucket 1 minus bucket 5) is +0.091 % per week, t = +0.84.**
 
 The sign points the way reversal predicts. The spread is less
@@ -162,6 +164,8 @@ this sort.
 | 3 | 33 | +0.073 | +0.87 | +0.90 |
 | 5 | 20 | +0.091 | +0.84 | +0.87 |
 | 10 | 10 | +0.149 | +1.05 | +1.06 |
+
+![Mean forward return by bucket at 3, 5 and 10 buckets, with plus or minus one standard error](docs/bucket_shape_counts.png)
 
 The spread keeps its sign and grows as the buckets narrow, which is what a concentrated
 signal would do, but no cut is close to significant. Ten buckets of ten names is mostly noise.
