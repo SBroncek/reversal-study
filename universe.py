@@ -1,10 +1,8 @@
 """The ticker universe for the study.
 
-WARNING: this is today's membership, not point-in-time. These are names that are
-large caps *now*, which means the list already knows which companies survived and
-grew. Anything that was dropped from the index, got acquired, or went bust is
-missing. Any result computed on this list is made optimistic by that survivorship
-bias, and the README has to say so.
+Today's index membership, not point-in-time, so the list already knows which
+companies survived. Anything dropped, acquired or bust is missing, and any result
+computed on it is made optimistic by that. The README states it as defect 1.
 """
 
 TICKERS = [

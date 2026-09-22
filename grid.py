@@ -1,12 +1,12 @@
-"""Stage 4b: the lookback x holding-period grid.
+"""The lookback x holding-period grid.
 
 Each cell ranks stocks on their past `lookback` trading days and measures the next
-`hold` trading days. Re-ranking happens only once the hold has finished (decided
-16 Sept), so no two forward returns share a day and no overlap correction is needed.
-Cost: a 21-day hold gives ~125 observations instead of ~520.
+`hold` trading days. Re-ranking happens only once the hold has finished, so no two
+forward returns share a day and no overlap correction is needed. The cost is
+observations: a 21-day hold gives about 125 instead of about 520.
 
-Counts TRADING days, not calendar Fridays, so the 5x5 cell is close to but not
-identical to the headline weekly result. The gap is the price of the Friday grid.
+Counts trading days, not calendar Fridays, so the 5x5 cell is close to but not
+identical to the headline weekly result.
 """
 
 import pandas as pd
@@ -16,16 +16,13 @@ from download import load_universe
 
 def grid_build(panel: pd.DataFrame, lookback: int, hold: int):
     """Return (signal, forward) on rank dates spaced `hold` trading days apart."""
-    # rank dates: start late enough that a full lookback exists, stop early enough
-    # that a full hold exists, step by `hold` so forward windows never overlap
+    # start late enough for a full lookback, stop early enough for a full hold,
+    # step by `hold` so forward windows never overlap
     positions = range(lookback, len(panel) - hold, hold)
     dates = panel.index[positions]
 
-    # past `lookback` days: P_t / P_{t-lookback} - 1   (known at t)
-    signal = (panel / panel.shift(lookback) - 1).loc[dates]
-
-    # next `hold` days: P_{t+hold} / P_t - 1   (NOT known at t)
-    forward = (panel.shift(-hold) / panel - 1).loc[dates]
+    signal = (panel / panel.shift(lookback) - 1).loc[dates]      # known at t
+    forward = (panel.shift(-hold) / panel - 1).loc[dates]        # not known at t
 
     return signal, forward
 
@@ -34,8 +31,8 @@ LENGTHS = [1, 5, 21]     # one day, one week, one month, in trading days
 
 
 def run_grid(panel: pd.DataFrame, n_buckets: int = 5) -> pd.DataFrame:
-    """All nine lookback x hold cells through the same bucket test as stage 3."""
-    from robustness import run_one      # the stage-3 test, unchanged
+    """All nine lookback x hold cells through the same bucket test as the headline."""
+    from robustness import run_one
 
     rows = []
     for lookback in LENGTHS:

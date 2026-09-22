@@ -1,12 +1,11 @@
-"""Robustness dial 5: sub-period stability of the headline bucket spread.
+"""Sub-period stability of the headline bucket spread.
 
-Five consecutive blocks of ~104 weeks (two years), fixed BEFORE looking, on the rule
-"shortest block that still gives each one a usable t". Spread and t reported for all
-five. Pre-committed (16 Sept): if any block has |t| >= 2, re-run with the blocks
-shifted one year and only call it real if it survives the shift.
+Five consecutive two-year blocks, length fixed before looking. Pre-committed: if
+any block reaches |t| >= 2, re-run with the blocks shifted one year and only call
+it real if it survives the shift.
 
-Out-of-sample (choose on the first half, test once on the second) is deliberately NOT
-run: no setting was significant in-sample, so there is no finding to carry out.
+Out-of-sample selection is deliberately not run: nothing was significant
+in-sample, so there is no finding to carry out.
 """
 
 import numpy as np
@@ -23,8 +22,7 @@ N_BLOCKS = 5
 def block_stats(d: pd.Series, n_blocks: int = N_BLOCKS) -> pd.DataFrame:
     """Cut the weekly spread into consecutive blocks; spread, SE and t for each."""
     rows = []
-    # array_split: n roughly equal consecutive pieces, in time order, no shuffling.
-    # 521 weeks / 5 -> 105, 104, 104, 104, 104 (the remainder goes to the first).
+    # array_split keeps time order and gives the remainder to the first block
     for idx in np.array_split(np.arange(len(d)), n_blocks):
         block = d.iloc[idx]
         T = len(block)
@@ -46,7 +44,6 @@ if __name__ == "__main__":
     d = weekly_spread(bucket_means(*build(panel), n_buckets=5))
     table = block_stats(d)
 
-    # cross-check only: Newey-West t per block, expected close to (or above) plain t
     table["t_nw"] = [b.mean() / newey_west_se(b, default_lag(len(b)))
                      for b in (d.iloc[i] for i in np.array_split(np.arange(len(d)), N_BLOCKS))]
 

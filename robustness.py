@@ -1,34 +1,11 @@
-"""Robustness: does the bucket result survive changing the arbitrary dials?
+"""Robustness dial: the number of buckets, 3 vs 5 vs 10.
 
-A "robustness check" is the same test rerun with one setting changed. It is not
-a new question. The point is that nothing in the market says "five buckets", so
-if the finding lives or dies on that number then the finding was about the
-setting, not about stocks.
+Narrower buckets make each end a more extreme slice, which should widen the
+spread, and hold fewer names, which should grow the standard error. The t-stat is
+the race between those two, and which wins is not predictable from the armchair.
 
-THE DIAL TESTED HERE: the number of buckets, 3 vs 5 vs 10.
-
-What moves when it changes, and the two effects pull opposite ways:
-
-  MORE buckets -> each end bucket is a more EXTREME slice of the cross-section
-  (top 10% rather than top 20%), so the spread between the ends should WIDEN.
-
-  MORE buckets -> each end bucket holds FEWER names (99/10 is about 10 stocks,
-  against 20 at quintiles), so each week's bucket mean is noisier, so the
-  standard error should GROW.
-
-  The t-statistic is spread divided by its standard error, so it is a race
-  between those two. Which one wins is not predictable from the armchair, which
-  is the entire reason this file exists rather than an argument.
-
-A NOTE ON WHAT WOULD COUNT AS A FAILURE. This study's headline is a NULL: the
-quintile spread is a fraction of a percent per week at a t below 1, which is not
-distinguishable from zero. The live figures are printed by errorbars.py and are
-deliberately not repeated here, because a number copied into a docstring is a
-stale surface the moment the universe changes. So the check here is not "does it
-stay significant", since it never was.
-It is "does the SIGN stay put and does the magnitude stay the same order".
-A null that becomes a strong positive at 10 buckets and a strong negative at 3
-would mean the panel is being fitted, not measured.
+The check is not "does it stay significant", since it never was. It is whether the
+sign stays put and the magnitude stays the same order.
 """
 
 import numpy as np
@@ -39,8 +16,6 @@ from signal_build import build
 from buckets import bucket_means
 from errorbars import weekly_spread, newey_west_se, default_lag
 
-WEEKS_PER_YEAR = 52
-
 
 def run_one(signal: pd.DataFrame, forward: pd.DataFrame, n: int) -> dict:
     """One full bucket test at n buckets, with both error bars."""
@@ -49,14 +24,14 @@ def run_one(signal: pd.DataFrame, forward: pd.DataFrame, n: int) -> dict:
 
     T = len(d)
     mean = d.mean()
-    sd = d.std(ddof=1)                # ddof=1: sample SD, divides by T-1
+    sd = d.std(ddof=1)
     se = sd / np.sqrt(T)
     nw = newey_west_se(d, default_lag(T))
 
     return {
         "n_buckets": n,
         "weeks": T,
-        "names_per_bucket": len(signal.columns) / n,   # nominal, ~99 names
+        "names_per_bucket": len(signal.columns) / n,   # nominal
         "spread": mean,
         "sd": sd,
         "se": se,

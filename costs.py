@@ -1,11 +1,13 @@
-"""Robustness: transaction costs on the long-short spread (long bucket 1, short bucket 5).
+"""Transaction costs on the long-short spread (long bucket 1, short bucket 5).
 
-Cost is charged on MONEY TRADED, not per order, so grouping orders changes nothing.
-Per 100 of one leg, fully replacing a leg trades 200 (100 out, 100 in); two legs trade
-400. So weekly cost on the spread = (turnover_long + turnover_short) * 2 * cost.
+Cost is charged on money traded, not per order, so grouping orders changes
+nothing. Per 100 of one leg, fully replacing that leg trades 200 (100 out, 100
+in), and two legs trade 400, so weekly cost on the spread is
+(turnover_long + turnover_short) * 2 * cost.
 
-Pre-committed (16 Sept): if the net spread at 5bp is <= 0, the README says "does not
-survive realistic costs" and we stop. No search for a cost level that rescues it.
+Pre-committed before this was run: if the net spread at 5bp is <= 0, the
+README says it does not survive realistic costs and we stop. No search for a cost
+level that rescues it.
 """
 
 import numpy as np
@@ -35,9 +37,9 @@ def turnover(m: pd.Series) -> pd.Series:
 
 def net_spread(d: pd.Series, to_long: pd.Series, to_short: pd.Series,
                bp: float) -> pd.Series:
-    """Weekly spread minus that week's cost. Cost = (TO_long + TO_short) * 2 * bp."""
+    """Weekly spread minus that week's cost."""
     cost = (to_long + to_short) * 2 * bp / 10_000
-    return (d - cost.reindex(d.index)).dropna()   # week 1 has no prior bucket: dropped
+    return (d - cost.reindex(d.index)).dropna()   # week 1 has no prior bucket
 
 
 def t_stat(x: pd.Series) -> float:

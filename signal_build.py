@@ -1,53 +1,30 @@
-"""Build the signal and the forward return.
+"""Build the signal and the forward return on a weekly grid.
 
-Spec (fixed 25 Aug):
-  signal        = a stock's return over the PAST 5 trading days
-  forward return = the same stock's return over the NEXT 5 trading days
-  the two windows SHARE NO DAYS
+signal  = a stock's return over the past week
+forward = the same stock's return over the next week, sharing no days with it
 
-Implementation note (decided 28 Aug): a "week" is a CALENDAR week, anchored on
-the Friday close. Chosen over fixed 5-trading-day blocks because it is the grid a
-strategy would actually be rebalanced on. Cost: 18.5% of weeks in the sample are
-holiday-shortened, so the weekly observations are not identically scaled. The
-within-week ranking is unaffected (every name shares the same window), but the
-error bar in stage 3 rests on a slightly false assumption. README says so.
-
-THE FAILURE MODE THIS FILE IS WRITTEN AGAINST: shift(1) where shift(-1) was meant.
-It raises no error, and the "forward" return becomes the signal itself, so the
-study reports a perfect relationship. Hence `alignment_check()` at the bottom,
-which prints the four raw prices so a human can verify with a calculator.
+See the README for the week definition and the short-week caveat.
 """
 
 import pandas as pd
 
 from download import load_universe
 
+
 def anchor_grid(panel: pd.DataFrame) -> pd.DataFrame:
     """One row per week, holding that week's closing price for every ticker.
 
-    The only definition of a "week" in the study; build() and alignment_check()
+    The only definition of a week in the study. build() and alignment_check()
     both call it, so the check cannot verify a grid the study does not use.
-
-    .last() takes each column's last non-NaN value in the bucket, so a week whose
-    Friday was a holiday resolves to Thursday's close, still labelled Friday. The
-    label is a bucket name, not a claim about which weekday the price came from.
-    Selecting Fridays directly would instead drop those weeks outright: measured,
-    18 of the 523 anchors (3.4%) have no Friday trading day.
-
-    NOT to be confused with the 96 four-day weeks (18.5%), which is a different
-    quantity and belongs to a different argument. In 78 of those the missing day
-    is a Monday or a Wednesday and the Friday traded normally, so .last() never
-    sees them. 18.5% is the correct figure for the README's caveat that weekly
-    observations are not identically scaled; 3.4% is the figure that justifies
-    .last() over selecting Fridays. (An earlier version of this docstring fused
-    the two and cited 96 here. Verified against the panel 5 Sept.)
-
-    how="all" only removes weeks with no data for any name, and on this panel it
-    removes none: 523 rows in, 523 out. It is standing in front of the default.
-    "any" would cut the sample to 381, deleting 142 weeks (27%) because a single
-    one of the 99 tickers was missing, so one 2019 IPO would silently erase the
-    first three years of the study for the other 98 names. Verified 5 Sept.
     """
+    # .last() takes each column's last non-NaN value in the week, so a week whose
+    # Friday was a holiday resolves to Thursday's close, still labelled Friday.
+    # Selecting Fridays directly would drop those weeks: 18 of 526 anchors (3.4%)
+    # have no Friday trading day.
+    #
+    # how="all" drops only weeks with no data for any name, which on this panel is
+    # none. "any" would cut the sample to 381, since one 2019 IPO would erase the
+    # first three years for the other 99 names.
     return panel.resample("W-FRI").last().dropna(how="all")
 
 
@@ -55,11 +32,10 @@ def build(panel: pd.DataFrame):
     """Return (signal, forward) frames: week-ending dates down, tickers across."""
     anchors = anchor_grid(panel)
 
-    # past week: (P_t / P_{t-1}) - 1 on the WEEKLY grid, info available at t
+    # past week, known at t
     signal = anchors.pct_change()
 
-    # next week: (P_{t+1} / P_t) - 1.
-    # shift(-1) on the ANCHOR grid pulls the NEXT week's price back to row t.
+    # next week: shift(-1) pulls the NEXT week's price back to row t
     forward = anchors.shift(-1) / anchors - 1
 
     return signal, forward
@@ -70,10 +46,9 @@ def alignment_check(panel: pd.DataFrame, ticker: str, anchor_date):
     anchors = anchor_grid(panel)
     signal, forward = build(panel)
 
-    # get_indexer, not get_loc: get_loc's return type is int | slice | bool-array,
-    # since a non-unique index makes "the position of this label" ambiguous. On a
-    # duplicated week label the arithmetic below would then silently do something
-    # other than what it reads as. get_indexer always gives positions, -1 if absent.
+    # get_indexer, not get_loc: get_loc returns int | slice | bool-array, so on a
+    # duplicated week label the arithmetic below would silently do something other
+    # than what it reads as. get_indexer always gives positions, -1 if absent.
     i = int(anchors.index.get_indexer(pd.DatetimeIndex([anchor_date]))[0])
     if i < 1 or i > len(anchors) - 2:
         raise KeyError(f"{anchor_date} is not an anchor with a week either side")
